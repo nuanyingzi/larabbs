@@ -8,6 +8,10 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -73,5 +77,28 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    /**
+     * 注册
+     */
+    public function register(Request $request)
+    {
+        // 检测数据是否符合要求
+        $this->validator($request->all())->validate();
+
+        // 创建用户同时触发用户注册成功的事件，并将用户传参
+        event(new Registered($user = $this->create($request->all())));
+        
+        // 登录用户
+        $this->guard()->login($user);
+
+        // 调用钩子方法 `registered()` 
+        if ($response = $this->registered($request, $user)) {
+            return $response;
+        }
+        
+        // 按需返回 json 数据，否则重定向
+        return $request->wantsJson() ? new JsonResponse([], 201) : redirect($this->redirectPath());
     }
 }
