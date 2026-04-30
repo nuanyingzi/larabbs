@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\User;
+
+class UsersController extends Controller
+{
+    public function __construct()
+    {
+        // $this->middleware('auth');
+    }
+
+    /**
+     * 显示指定资源。
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function show(User $user)
+    {
+        return view('users.show', compact('user'));
+    }
+}
