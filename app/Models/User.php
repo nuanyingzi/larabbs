@@ -50,4 +50,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Storage::url('images/hashiqi.png');
     }
+
+    public function topics()
+    {
+        return $this->hasMany(Topic::class);
+    }
 }
