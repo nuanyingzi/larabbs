@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.5",
         "mews/captcha": "^3.3",
         "mews/purifier": "^3.4",
-        "overtrue/laravel-lang": "^5.0"
+        "overtrue/laravel-lang": "^5.0",
+        "overtrue/pinyin": "^4.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",

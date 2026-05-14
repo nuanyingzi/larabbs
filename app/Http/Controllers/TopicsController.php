@@ -25,8 +25,11 @@ class TopicsController extends Controller
 		return view('topics.index', compact('topics'));
 	}
 
-    public function show(Topic $topic)
+    public function show(Request $request, Topic $topic)
     {
+		if (!empty($topic->slug) && $topic->slug != $request->slug) {
+			return redirect($topic->link(), 301);
+		}
         return view('topics.show', compact('topic'));
     }
 
@@ -52,21 +55,35 @@ class TopicsController extends Controller
 		$topic->fill($request->all());
 		$topic->user_id = auth()->user()->id;
 		$topic->save();
-		return redirect()->route('topics.show', $topic->id)->with('message', '帖子创建成功');
+		return redirect($topic->link())->with('message', '帖子创建成功');
 	}
 
+	/**
+	 * 显示编辑资源表单。
+	 *
+	 * @param  \App\Models\Topic  $topic
+	 * @return \Illuminate\Http\Response
+	 */
 	public function edit(Topic $topic)
 	{
         $this->authorize('update', $topic);
-		return view('topics.create_and_edit', compact('topic'));
+		$categories = Category::all();
+		return view('topics.create_and_edit', compact('topic', 'categories'));	
 	}
 
+	/**
+	 * 更新指定资源。
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \App\Models\Topic  $topic
+	 * @return \Illuminate\Http\Response
+	 */
 	public function update(TopicRequest $request, Topic $topic)
 	{
 		$this->authorize('update', $topic);
 		$topic->update($request->all());
 
-		return redirect()->route('topics.show', $topic->id)->with('message', 'Updated successfully.');
+		return redirect($topic->link())->with('message', '帖子更新成功');
 	}
 
 	public function destroy(Topic $topic)
