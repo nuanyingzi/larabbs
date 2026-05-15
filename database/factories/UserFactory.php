@@ -23,6 +23,7 @@ class UserFactory extends Factory
             'http://larabbs.test/uploads/images/avatars/头像_天秤座.png',
             'http://larabbs.test/uploads/images/avatars/头像-兔3.png',
         ];
+        
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),

@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Topic;
 use App\Handlers\SlugTranslateHandler;
+use App\Jobs\TranslateSlug;
 
 
 // creating, created, updating, updated, saving,
@@ -27,7 +28,14 @@ class TopicObserver
         $topic->excerpt = make_excerpt($topic->body);
 
         if (! $topic->slug) {
-            $topic->slug = app(SlugTranslateHandler::class)->translate($topic->title);
+            // 队列
+            dispatch(new TranslateSlug($topic));
         }
+    }
+
+    public function deleted(Topic $topic)
+    {
+        // 删除关联的回复
+        $topic->replies()->delete();
     }
 }

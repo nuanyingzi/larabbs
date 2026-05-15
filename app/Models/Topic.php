@@ -21,6 +21,12 @@ class Topic extends Model
     {
         return $this->belongsTo(User::class);
     }
+    
+    // 关联回复
+    public function replies()
+    {
+        return $this->hasMany(Reply::class);
+    }
 
     /**
      * 作用域查询，根据排序参数返回不同的查询结果

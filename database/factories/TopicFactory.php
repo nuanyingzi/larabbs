@@ -13,7 +13,7 @@ class TopicFactory extends Factory
 
     public function definition()
     {
-        $sentence = $this->faker->sentence();
+        $sentence = $this->faker->text(rand(10, 30));
 
         return [
             // $this->faker->name,

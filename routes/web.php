@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'PagesController@root')->name('root');
+Route::get('/', 'TopicsController@index')->name('root');
 
 // 用户身份验证相关的路由
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -48,3 +48,7 @@ Route::get('topics/{topic}/{slug?}', 'TopicsController@show')->name('topics.show
 Route::resource('categories', 'CategoriesController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
 
 Route::post('upload_image', 'TopicsController@uploadImage')->name('topics.upload_image');
+Route::resource('replies', 'RepliesController', ['only' => ['store', 'update', 'edit', 'destroy']]);
+
+// 通知相关路由
+Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);

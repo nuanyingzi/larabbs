@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -46,6 +47,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    use Notifiable {
+        notify as protected laravelNotify;
+    }
+
     public function getavcatar()
     {
         return Storage::url('images/hashiqi.png');
@@ -56,8 +61,41 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Topic::class);
     }
 
+    public function replies()
+    {
+        return $this->hasMany(Reply::class);
+    }
+
     public function isAuthorOf($model)
     {
         return $this->id == $model->user_id;
+    }
+
+    /**
+     * 自定义通知方法
+     */
+    public function notify($instance)
+    {
+        // 如果要通知的人是当前用户,且不是在验证邮箱，就不必通知了！
+        if ($this->id == Auth::id()&&get_class($instance)!="Illuminate\Auth\Notifications\VerifyEmail") {
+            return;
+        }
+
+        // 只有数据库类型通知才需提醒，直接发送 Email 或者其他的都 Pass
+        if (method_exists($instance, 'toDatabase')) {
+            $this->increment('notification_count');
+        }
+
+        $this->laravelNotify($instance);
+    }
+
+    /**
+     * 标记所有通知为已读
+     */
+    public function markAsRead()
+    {
+        $this->notification_count = 0;
+        $this->save();
+        $this->unreadNotifications->markAsRead();
     }
 }

@@ -25,6 +25,12 @@ class TopicsController extends Controller
 		return view('topics.index', compact('topics'));
 	}
 
+	/**
+	 * 显示指定资源。
+	 *
+	 * @param  \App\Models\Topic  $topic
+	 * @return \Illuminate\Http\Response
+	 */
     public function show(Request $request, Topic $topic)
     {
 		if (!empty($topic->slug) && $topic->slug != $request->slug) {

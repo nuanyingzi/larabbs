@@ -26,7 +26,12 @@
         @else
           <li class="nav-item">
             <a class="nav-link mt-1 mr-3 font-weight-bold" href="{{ route('topics.create') }}">
-              <img src="{{ asset('uploads/images/create.png') }}" alt="添加话题" width="20px" height="20px" style="margin-bottom: 6px;">
+              <img src="{{ asset('uploads/images/create.png') }}" alt="添加话题" width="20px" height="20px">
+            </a>
+          </li>
+          <li class="nav-item notification-badge">
+            <a class="nav-link ms-3 me-3 badge bg-secondary rounded-pill badge-{{ Auth::user()->notification_count > 0 ? 'hint' : 'secondary' }} text-white" href="{{ route('notifications.index') }}">
+              {{ Auth::user()->notification_count }}
             </a>
           </li>
           <li class="nav-item dropdown">
