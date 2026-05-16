@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Topic;
 use App\Observers\TopicObserver;
+use App\Models\Link;
+use App\Observers\LinkObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,5 +36,7 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Pagination\Paginator::useBootstrap();
         // 监听Topic模型的事件
         Topic::observe(TopicObserver::class);
+        // 监听Link模型的事件
+        Link::observe(LinkObserver::class);
     }
 }

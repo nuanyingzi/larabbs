@@ -18,11 +18,6 @@ class ReplyObserver
         }
     }
 
-    public function updating(Reply $reply)
-    {
-        //
-    }
-
     /**
      * 回复创建后，增加话题回复数
      */
@@ -36,7 +31,7 @@ class ReplyObserver
         $reply->topic->save();
 
         // 发送通知
-        $reply->topic->user->notify(new TopicReplied($reply));
+        // $reply->topic->user->notify(new TopicReplied($reply));
     }
 
     /**
