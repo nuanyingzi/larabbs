@@ -52,3 +52,6 @@ Route::resource('replies', 'RepliesController', ['only' => ['store', 'update', '
 
 // 通知相关路由
 Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
+
+// 权限拒绝页面路由
+Route::get('permission-denied', 'PagesController@permissionDenied')->name('permission-denied');
